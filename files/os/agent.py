@@ -8,7 +8,7 @@ import urllib
 # ss = [{"name": "abc", "scripts": ["script.sh", "abc"], "args": ["args"]}]
 
 service_name_task_dispatch = "task-dispatch"
-service_path_task_dispatch = "/v1/endpoint/:endpoint/tasks"
+service_path_task_dispatch = "/v1/endpoint/%s/tasks"
 service_name_files = "files"
 
 
