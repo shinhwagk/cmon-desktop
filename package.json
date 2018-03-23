@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/shinhwagk/cmon-desktop/issues"
   },
-  "homepage": "https://github.com/shinhwagk/cmon-desktop#readme"
+  "homepage": "https://github.com/shinhwagk/cmon-desktop#readme",
+  "dependencies": {
+    "cmon-lib": "^1.6.5"
+  }
 }

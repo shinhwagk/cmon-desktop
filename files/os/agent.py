@@ -66,8 +66,8 @@ def http_client(method, host, port, url):
 
 def download_file(name, script):
     f_addr, f_port = extract_service(service_name_files)
-    path = os.path.join("os", name, script)
-    url = "http://%s:%s%s" % (f_addr, f_port, path)
+    path = os.path.join(name, script)
+    url = "http://%s:%s/files/os/%s" % (f_addr, f_port, path)
     location = gen_script_location(name, script)
     urllib.urlretrieve(url, location)
 
@@ -76,13 +76,15 @@ def gen_script_url_path(name, script):
     return os.path.join("os", name, script)
 
 
+def make_dirs(dirs_path):
+    if not os.path.exists(dirs_path):
+        os.makedirs(dirs_path)
+
+
 def gen_script_location(name, script):
-    return os.path.join(cache_location, name, script)
-
-
-def execute_script(script, args):
-    os.system()
-    return 1
+    file_path = os.path.join(cache_location, name, script)
+    make_dirs("/".join(file_path.split("/")[:-1][1:]))
+    return file_path
 
 
 def put_task_result(t_name, t_result):
@@ -94,19 +96,20 @@ def put_task_result(t_name, t_result):
 def request_tasks():
     td_addr, td_port = extract_service(service_name_task_dispatch)
     path = service_path_task_dispatch % endpoint_name
-    return json.loads(http_client("GET", td_addr, td_port, path))
+    return http_client("GET", td_addr, td_port, path)
 
 
 def main():
-    for task in request_tasks():
+    tasks = request_tasks()
+    for task in json.loads(tasks):
         task_name = task["task_name"]
         task_scripts = task["task_scripts"]
         task_args = task["task_args"]
-        for script in task_scripts:
+        for script in json.loads(task_scripts):
             if not check_script_usable(task_name, script):
                 download_file(task_name, script)
-            result = os.system()
-            put_task_result(task_name, result)
+#            result = os.system()
+#            put_task_result(task_name, result)
 
 
 if __name__ == "__main__":
