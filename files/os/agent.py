@@ -99,9 +99,9 @@ def request_tasks():
 
 def main():
     for task in request_tasks():
-        task_name = task["name"]
-        task_scripts = task["scripts"]
-        task_args = task["args"]
+        task_name = task["task_name"]
+        task_scripts = task["task_scripts"]
+        task_args = task["task_args"]
         for script in task_scripts:
             if not check_script_usable(task_name, script):
                 download_file(task_name, script)
