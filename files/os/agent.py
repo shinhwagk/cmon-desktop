@@ -67,7 +67,7 @@ def http_client(method, host, port, url):
 def download_file(name, script):
     f_addr, f_port = extract_service(service_name_files)
     path = os.path.join("os", name, script)
-    url = "http://%s:%s%s" % (f_addr, f_port, path)
+    url = "http://%s:%s%s/" % (f_addr, f_port, path)
     location = gen_script_location(name, script)
     urllib.urlretrieve(url, location)
 
