@@ -76,9 +76,14 @@ def gen_script_url_path(name, script):
     return os.path.join("os", name, script)
 
 
+def make_dirs(dirs_path):
+    if os.path.exists(dirs_path):
+        os.makedirs(dirs_path)
+
+
 def gen_script_location(name, script):
     file_path = os.path.join(cache_location, name, script)
-    os.makedirs("/".join(file_path.split("/")[:-1]))
+    make_dirs("/".join(file_path.split("/")[:-1][1:]))
     return file_path
 
 
