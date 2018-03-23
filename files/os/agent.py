@@ -77,7 +77,9 @@ def gen_script_url_path(name, script):
 
 
 def gen_script_location(name, script):
-    return os.path.join(cache_location, name, script)
+    file_path = os.path.join(cache_location, name, script)
+    os.makedirs("/".join(file_path.split("/")[:-1]))
+    return file_path
 
 
 def execute_script(script, args):
