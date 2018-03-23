@@ -94,7 +94,7 @@ def put_task_result(t_name, t_result):
 def request_tasks():
     td_addr, td_port = extract_service(service_name_task_dispatch)
     path = service_path_task_dispatch % endpoint_name
-    return http_client("GET", td_addr, td_port, path)
+    return json.loads(http_client("GET", td_addr, td_port, path))
 
 
 def main():
