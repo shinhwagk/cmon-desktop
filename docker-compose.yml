@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  service-oracle:
+    image: node:9.8.0
+    container_name: cmon-service-oracle
+    ports:
+      - 9509:8000
+    networks:
+      cmon:
+        aliases:
+          - query.oracle.service.cmon.org
+  database:
+    image: mysql:5.7.21
+    container_nam: cmon-service-database
+    ports:
+      - 3306:3306
+    networks:
+      cmon:
+        aliases:
+          - database.service.cmon.org      
+  files:
+    image: nginx
+    container_name: cmon-services-files
+    volumes:
+      - /opt/cmon/files:/etc/nginx/html/files
+      - /opt/cmon/files/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 9501:80
+    restart: always
+    networks:
+      cmon:
+        aliases:
+          - files.cmon.org
+  agent-sql:
+    image: cmon/agent-sql
+    container_name: cmon-sql
+    restart: always
+    ports:
+      - 9500:9500
+    networks:
+      cmon:
+        aliases:
+          - sql.cmon.org
+  consul:
+    image: consul
+    container_name: cmon-consul
+    hostname: consul
+    domainname: monitor.wex.org
+    ports:
+      - 8500:8500
+      - 8600:8600/udp
+    command:
+      - agent
+      - -dev
+      - -ui
+      - -client 
+      - 0.0.0.0
+    networks:
+      cmon:
+        aliases:
+          - consul.cmon.org
+  influxdb:
+    image: influxdb
+    container_name: cmon-influxdb
+    ports:
+      - 8086:8086
+    restart: always
+    networks:
+      cmon:
+        aliases:
+          - influxdb.cmon.org
+  chronograf:
+    image: chronograf
+    container_name: cmon-chronograf
+    ports:
+      - 8888:8888
+    command:
+      - --influxdb-url=http://influxdb.cmon.org:8086
+    restart: always
+    networks:
+      - cmon
+
+networks: 
+  cmon:
+    driver: bridge
